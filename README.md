@@ -4,6 +4,8 @@
 
 * A [Dragonfly SMS](http://www.dragonflysms.com) developer account 
 
+Set up a free account today and get 100 free message credits to start testing
+
 ## Usage
 
 Example to follow
