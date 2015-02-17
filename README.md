@@ -1,4 +1,4 @@
-# Dragonfly SMS Web API Wrapper for python
+# Dragonfly SMS API Wrapper for python
 
 ### Prerequisites
 
