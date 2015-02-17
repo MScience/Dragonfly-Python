@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-* A Dragonfly SMS developer account
+* A [Dragonfly SMS](http://www.dragonflysms.com) developer account 
 
 ## Usage
 
