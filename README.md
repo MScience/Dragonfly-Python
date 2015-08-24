@@ -7,8 +7,8 @@
 Set up a free account today and get 100 free message credits to start testing
 
 ## Usage
-PLEASE GO TO THE RELEASES SECTION TO GET THE LATEST VERSION OF THE WRAPPER
-https://github.com/MScience/Dragonfly-Python/releases
+THE LATEST VERSION OF THE WRAPPER IS AT THE LINK BELOW
+https://github.com/MScience/Dragonfly-Python/blob/master/MScience.Sms.py
 
 # Contributing
 
