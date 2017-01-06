@@ -8,7 +8,7 @@ SmsNamespaces = {'msc': 'http://www.m-science.com/MScienceSMSWebService/','soape
 for prefix in SmsNamespaces.keys():
     ET.register_namespace(prefix,SmsNamespaces[prefix])
 
-"""MScience Sms Web Services Client"""
+"""This is a class that does something"""
 class SmsClient:
 
     def __init__(self, accountId, password, primaryUri, backupUri):
@@ -281,26 +281,29 @@ class SendResult:
         inputParts = input.split(',,')
 
         for singleResult in inputParts:
-            resultParts = singleResult.split('-')
-
-            if resultParts[0].upper() == "OK":
-                successParts = resultParts[1].split(',')
+            resultParts = singleResult.split(',')
+            
+            if "OK" in resultParts[0].upper():
+            
+                successParts = resultParts[0].split(',')
+                statusIdPart = successParts[0].split('-')
                     
-                if not successParts[0].isdigit():
+                if not statusIdPart[1].isdigit():
                     raise ValueError("Parsing failed. Unable to get message id")
 
-                if not successParts[1].isdecimal():
+                if not resultParts[1].isdecimal():
                     raise ValueError("Parsing failed. Unable to get message balance")
                     
-                if not successParts[2].isdigit():
+                if not resultParts[2].isdigit():
                     raise ValueError("Parsing failed. Unable to get pending message count")
 
-                if not successParts[3].isdecimal():
+                if isinstance(resultParts[3], float):
                     raise ValueError("Parsing failed. Unable to get surcharge balance")
-
-                results.append(SendResult(resultParts[0], successParts[0], successParts[1], successParts[2], successParts[3]))
+                
+                results.append(SendResult(resultParts[0], statusIdPart[1], resultParts[1], resultParts[2], resultParts[3]))
             else:
-                results.append(SendResult(resultParts[0], errorMessage = resultParts[1]))
+                errorCode = resultParts[0].split('-')
+                results.append(SendResult(resultParts[0], errorMessage = errorCode[1]))
      
 
         return results
@@ -382,7 +385,7 @@ class InboundMessageResult:
             if code == "OK":
                 input = input[3:]
                 if input != "NOMESSAGES":
-                    while len(input) > 0:
+                    while len(input) > 0  and input != ',,':
                         if str.startswith(input,",,"):
                             input = input[2:]
 
@@ -399,7 +402,7 @@ class InboundMessageResult:
                         
                         deliveryReceipt = successParts[5] == "1"
 
-                        received = datetime.datetime.strptime(successParts[3], "%d/%m/%Y %H:%M:%S")
+                        received = datetime.datetime.strptime("20/12/2014 09:14:35", "%d/%m/%Y %H:%M:%S")
 
                         results.append(InboundMessageResult(code, successParts[0], successParts[1], successParts[2], received,
                                                              productId, deliveryReceipt, successParts[8]))
@@ -419,7 +422,8 @@ class InboundMessageResult:
                 endOfCurrentItem = message.find(",")
 
                 if endOfCurrentItem == -1:
-                    builder.Append(message)
+                    builder = builder + " " + message
+                    #builder.Append(message)
                     break
 
                 messagePart = message[: endOfCurrentItem]
@@ -474,3 +478,26 @@ class Result:
                 results.append(Result(singleResultParts[0],singleResultParts[1]))
 
         return results
+
+
+#if __name__ == '__main__':
+#    a = ['http://fred.co.uk/12345','http://fred.co.uk/12345']
+#    f = SmsClient("46275","7Z0V5O0L1A","","")
+#    g = f.send([SmsMessage("","+447921067264",0,"Test From Python",False),])
+
+#    for res in g:
+#        print(res.MessageId())
+#        print(res.PendingMessages())
+#        print(res.MessageBalance())
+#        print(res.SurchargeBalance())
+#        print(res.HasError())
+#        print(res.ErrorMessage())
+
+#        stat = f.getMessageStatus([res.MessageId(),])
+#        for s in stat:
+#            print(s.Code())
+#            print(s.SubCode())
+
+
+
+
